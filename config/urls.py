@@ -1,3 +1,5 @@
+"""URL configuration for the greeting app."""
+
 from django.contrib import admin
 from django.urls import path, include
 
