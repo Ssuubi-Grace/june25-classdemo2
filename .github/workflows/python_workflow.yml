@@ -1,0 +1,82 @@
+name: Python workflow
+
+on: [pull-request,push] #trigger the workflow on pull requests and pushes
+
+jobs:
+  install: #job to install dependencies
+    runs-on: ubuntu-latest
+    env: #setting up environment variables
+      VENV: venv
+
+    steps:
+      - name: Checkout code #this gives the vm access to the code
+        uses: actions/checkout@v4  #checkout the code from the repository
+    
+      - name: Set up Python #setting up python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13' #specifying the python version
+
+      - name: Create virtual environment and install dependencies
+        run: | #if you are running more than one command, use the pipe symbol
+          python3 -m venv $VENV   #create a virtual environment
+          source $VENV/bin/activate #activate the virtual environment
+          pip install -r requirements.txt #install dependencies from requirements.txt
+
+  test: #job to run tests
+    needs: install #this job depends on the install job
+    runs-on: ubuntu-latest
+    env: #setting up environment variables
+      VENV: venv
+
+    steps:
+      - name: Checkout code #this gives the vm access to the code
+        uses: actions/checkout@v4  #checkout the code from the repository
+    
+      - name: Set up Python #setting up python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13' #specifying the python version
+
+      - name: Create virtual environment and install dependencies
+        run: | #if you are running more than one command, use the pipe symbol
+          python3 -m venv $VENV   #create a virtual environment
+          source $VENV/bin/activate #activate the virtual environment
+          pip install -r requirements.txt #install dependencies from requirements.txt
+
+      - name: Run tests #run the tests
+        run: | #if you are running more than one command, use the pipe symbol
+          source $VENV/bin/activate #activate the virtual environment
+          pytest #run the tests in the tests directory
+
+  lint: #job to run linters
+    needs: test #this job depends on the test job
+    runs-on: ubuntu-latest
+    env: #setting up environment variables
+      VENV: venv
+
+    steps:
+      - name: Checkout code #this gives the vm access to the code
+        uses: actions/checkout@v4  #checkout the code from the repository
+    
+      - name: Set up Python #setting up python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13' #specifying the python version
+
+      - name: Create virtual environment and install dependencies
+        run: | #if you are running more than one command, use the pipe symbol
+          python3 -m venv $VENV   #create a virtual environment
+          source $VENV/bin/activate #activate the virtual environment
+          pip install -r requirements.txt #install dependencies from requirements.txt
+          pip install pylint #install pylint for linting
+
+      - name: Run pylint #run the linter
+        run: | #if you are running more than one command, use the pipe symbol
+          source $VENV/bin/activate #activate the virtual environment
+          pylint . --ignore=venv,.pytest_cache #run pylint on the code
+
+        
+
+
+        
