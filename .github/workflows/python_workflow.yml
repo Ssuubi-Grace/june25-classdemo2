@@ -1,6 +1,6 @@
 name: Python workflow
 
-on: [pull-request,push] #trigger the workflow on pull requests and pushes
+on: [pull_request, push] #trigger the workflow on pull requests and pushes
 
 jobs:
   install: #job to install dependencies
